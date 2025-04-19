@@ -1,10 +1,9 @@
-
-import { UsuarioService } from '../usuario/usuario.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { UsuarioService } from '../usuario/usuario.service';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
-interface UsuarioPayload {
+export interface UsuarioPayload {
   sub: string;
   nomeUsuario: string;
 }
@@ -13,7 +12,7 @@ interface UsuarioPayload {
 export class AutenticacaoService {
   constructor(
     private usuarioService: UsuarioService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async login(email: string, senhaInserida: string) {
@@ -26,17 +25,15 @@ export class AutenticacaoService {
 
     if (!usuarioFoiAutenticado) {
       throw new UnauthorizedException('O email ou a senha está incorreto.');
+    }
+
+    const payload: UsuarioPayload = {
+      sub: usuario.id, // subject = sujeito
+      nomeUsuario: usuario.nome,
+    };
+
+    return {
+      token_acesso: await this.jwtService.signAsync(payload),
+    };
   }
-  
-  const payload: UsuarioPayload = {
-    sub: usuario.id, // subject = sujeito
-    nomeUsuario: usuario.nome,
-  };
-
-  return {
-    token_acesso: await this.jwtService.signAsync(payload),
-  };
-
-
-}
 }

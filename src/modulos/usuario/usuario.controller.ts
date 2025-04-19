@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -22,20 +21,11 @@ export class UsuarioController {
   async criaUsuario(
     @Body() { senha, ...dadosDoUsuario }: CriaUsuarioDTO,
     @Body('senha', HashearSenhaPipe) senhaHasheada: string,
-    
   ) {
-
-    if (!senha) {
-      throw new BadRequestException('Senha não pode estar vazia');
-    }
-
-
     const usuarioCriado = await this.usuarioService.criaUsuario({
       ...dadosDoUsuario,
       senha: senhaHasheada,
     });
-
-    console.log(usuarioCriado);
 
     return {
       messagem: 'usuário criado com sucesso',

@@ -29,6 +29,16 @@ export class UsuarioService {
     return usuariosLista;
   }
 
+  async buscaUsuarioPorId(id: string) {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+  
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+  
+    return usuario;
+  }
+
   async buscaPorEmail(email: string) {
     const checkEmail = await this.usuarioRepository.findOne({
       where: { email },

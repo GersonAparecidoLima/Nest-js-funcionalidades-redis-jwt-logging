@@ -12,6 +12,8 @@ import { AtualizaUsuarioDTO } from './dto/AtualizaUsuario.dto';
 import { CriaUsuarioDTO } from './dto/CriaUsuario.dto';
 import { ListaUsuarioDTO } from './dto/ListaUsuario.dto';
 import { UsuarioService } from './usuario.service';
+import { NotFoundException } from '@nestjs/common'; // certifique-se de importar isso também
+
 
 @Controller('/usuarios')
 export class UsuarioController {
@@ -32,6 +34,19 @@ export class UsuarioController {
       usuario: new ListaUsuarioDTO(usuarioCriado.id, usuarioCriado.nome),
     };
   }
+
+
+  @Get('/:id')
+  async buscaUsuarioPorId(@Param('id') id: string) {
+    const usuario = await this.usuarioService.buscaUsuarioPorId(id);
+  
+    return {
+      mensagem: 'Usuário encontrado com sucesso.',
+      usuario: usuario, // ou um DTO se quiser filtrar
+    };
+  }
+  
+
 
   @Get()
   async listUsuarios() {

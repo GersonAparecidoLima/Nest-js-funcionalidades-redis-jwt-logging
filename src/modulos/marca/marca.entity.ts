@@ -1,4 +1,3 @@
-// src/modulos/marca/entities/marca.entity.ts
 
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 

@@ -1,23 +1,35 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner, TableForeignKey } from "typeorm";
 
-export class relacionaItemPedidoEProduto1685989589634
-  implements MigrationInterface
-{
-  name = 'relacionaItemPedidoEProduto1685989589634';
-
+export class RelacionaPedidoEItemPedido1685989050639 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "itens_pedidos" ADD "produtoId" uuid`);
-    await queryRunner.query(
-      `ALTER TABLE "itens_pedidos" ADD CONSTRAINT "FK_d07fbe9a1faab330529824f7fea" FOREIGN KEY ("produtoId") REFERENCES "produtos"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    const table = await queryRunner.getTable("itens_pedidos");
+    const hasConstraint = table?.foreignKeys.find(
+      fk => fk.name === "FK_aaa757efbf4f9fb222709a140b2"
     );
+
+    if (!hasConstraint) {
+      await queryRunner.createForeignKey(
+        "itens_pedidos",
+        new TableForeignKey({
+          columnNames: ["pedidoId"],
+          referencedColumnNames: ["id"],
+          referencedTableName: "pedidos",
+          onDelete: "CASCADE",
+          onUpdate: "CASCADE",
+          name: "FK_aaa757efbf4f9fb222709a140b2"
+        })
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "itens_pedidos" DROP CONSTRAINT "FK_d07fbe9a1faab330529824f7fea"`,
+    const table = await queryRunner.getTable("itens_pedidos");
+    const foreignKey = table?.foreignKeys.find(
+      fk => fk.name === "FK_aaa757efbf4f9fb222709a140b2"
     );
-    await queryRunner.query(
-      `ALTER TABLE "itens_pedidos" DROP COLUMN "produtoId"`,
-    );
+
+    if (foreignKey) {
+      await queryRunner.dropForeignKey("itens_pedidos", foreignKey);
+    }
   }
 }

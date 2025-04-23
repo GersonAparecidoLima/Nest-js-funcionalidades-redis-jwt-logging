@@ -18,12 +18,14 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
 import { LoggerGlobalInterceptor } from './recursos/interceptores/logger-global.interceptor';
 import { MarcaModule } from './modulos/marca/marca.module';
+import { VeiculosModule } from './modulos/veiculos/veiculos.module';
 
 @Module({
   imports: [
     UsuarioModule,
     ProdutoModule,
     MarcaModule,
+    VeiculosModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -40,6 +42,7 @@ import { MarcaModule } from './modulos/marca/marca.module';
     }),
     AutenticacaoModule,
     MarcaModule,
+    VeiculosModule,
   ],
   providers: [
     {

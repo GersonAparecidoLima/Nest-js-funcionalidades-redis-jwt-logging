@@ -8,8 +8,8 @@ const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [__dirname + '/../modulos/**/*.entity.{ts,js}'],
-  migrations: [__dirname + '/migrations/*.{ts,js}'],
+  entities: [__dirname + '/../modulos/**/*.entity.{ts,js}'],  // Verifique o caminho para suas entidades
+  migrations: [__dirname + '/migrations/*.{ts,js}'],            // Verifique o caminho para suas migrações
   synchronize: false,
   logging: true,
 };

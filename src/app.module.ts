@@ -17,11 +17,13 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
 import { LoggerGlobalInterceptor } from './recursos/interceptores/logger-global.interceptor';
+import { MarcaModule } from './modulos/marca/marca.module';
 
 @Module({
   imports: [
     UsuarioModule,
     ProdutoModule,
+    MarcaModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -37,6 +39,7 @@ import { LoggerGlobalInterceptor } from './recursos/interceptores/logger-global.
       isGlobal: true,
     }),
     AutenticacaoModule,
+    MarcaModule,
   ],
   providers: [
     {

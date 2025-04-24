@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Put } from '@nestjs/common';
 import { VeiculosService } from './veiculos.service';
 import { CreateVeiculoDto } from './dto/create-veiculo.dto';
 import { UpdateVeiculoDto } from './dto/update-veiculo.dto';
@@ -16,19 +16,25 @@ export class VeiculosController {
   findAll() {
     return this.veiculosService.findAll();
   }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.veiculosService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const veiculo = await this.veiculosService.findOne(id);
+    
+    if (!veiculo) {
+      throw new NotFoundException('Veículo não encontrado');
+    }
+  
+    return veiculo;
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateVeiculoDto: UpdateVeiculoDto) {
-    return this.veiculosService.update(+id, updateVeiculoDto);
+    return this.veiculosService.update(id, updateVeiculoDto); // agora o id é string como esperado
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.veiculosService.remove(+id);
+    return this.veiculosService.remove(id); // agora id continua como string
   }
+
 }

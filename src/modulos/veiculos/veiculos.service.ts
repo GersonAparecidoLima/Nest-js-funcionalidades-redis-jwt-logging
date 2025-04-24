@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { VeiculoEntity } from './veiculo.entity';
 import { CreateVeiculoDto } from './dto/create-veiculo.dto';
 import { UpdateVeiculoDto } from './dto/update-veiculo.dto';
 
 @Injectable()
 export class VeiculosService {
-  create(createVeiculoDto: CreateVeiculoDto) {
-    return 'This action adds a new veiculo';
+  constructor(
+    @InjectRepository(VeiculoEntity)
+    private readonly veiculoRepository: Repository<VeiculoEntity>,
+  ) {}
+
+  async create(createVeiculoDto: CreateVeiculoDto): Promise<VeiculoEntity> {
+    const veiculo = this.veiculoRepository.create(createVeiculoDto);
+    return this.veiculoRepository.save(veiculo);
   }
 
-  findAll() {
-    return `This action returns all veiculos`;
+  async findAll(): Promise<VeiculoEntity[]> {
+    return this.veiculoRepository.find({
+      relations: ['marca'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} veiculo`;
+  async findOne(id: string): Promise<VeiculoEntity> {
+    const veiculo = await this.veiculoRepository.findOne({
+      where: { id },
+      relations: ['marca'],
+    });
+
+    if (!veiculo) {
+      throw new NotFoundException(`Veículo com id ${id} não encontrado`);
+    }
+
+    return veiculo;
   }
 
-  update(id: number, updateVeiculoDto: UpdateVeiculoDto) {
-    return `This action updates a #${id} veiculo`;
+  async update(id: string, updateVeiculoDto: UpdateVeiculoDto): Promise<VeiculoEntity> {
+    await this.veiculoRepository.update(id, updateVeiculoDto);
+    return this.findOne(id); // já lança 404 se não encontrar
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} veiculo`;
+  async remove(id: string): Promise<void> {
+    const veiculo = await this.findOne(id); // garante que existe antes de deletar
+    await this.veiculoRepository.softDelete(veiculo.id);
   }
 }

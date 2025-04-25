@@ -24,8 +24,10 @@ export class VeiculoEntity {
   @ManyToOne(() => Marca, { eager: true }) // eager se quiser que sempre traga junto
   @JoinColumn({ name: 'marca_id' })
   marca: Marca;
+  
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 }) // nova coluna aqui
+  // Adicionando o campo "valor" à entidade
+  @Column({ type: 'decimal', nullable: true })
   valor: number;
 
   @CreateDateColumn({ name: 'created_at' })

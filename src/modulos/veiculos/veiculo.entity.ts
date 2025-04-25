@@ -25,6 +25,9 @@ export class VeiculoEntity {
   @JoinColumn({ name: 'marca_id' })
   marca: Marca;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2 }) // nova coluna aqui
+  valor: number;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

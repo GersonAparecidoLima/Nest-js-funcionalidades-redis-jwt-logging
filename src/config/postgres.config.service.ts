@@ -11,7 +11,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory {
     // Determina o caminho correto para as entidades (ts para desenvolvimento, js para produção)
     const entitiesPath = path.resolve(__dirname, '..', '**', '*.entity.{ts,js}');
     
-    console.log('Entities path:', entitiesPath);
+    //console.log('Entities path:', entitiesPath);
 
     // Determina o caminho para as migrações
     const migrationsPath = path.resolve(__dirname, '..', 'migrations', '*.js');
@@ -26,7 +26,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory {
       entities: [entitiesPath],
       migrations: [migrationsPath],  // Caminho das migrações
       synchronize: false,  // Desative em produção
-      logging: true,  // Mantenha o log para debug
+      //logging: true,  // Mantenha o log para debug
     };
   }
 }

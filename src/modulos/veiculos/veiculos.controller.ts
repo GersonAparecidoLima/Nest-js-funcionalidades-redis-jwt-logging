@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Put, UseInterceptors } from '@nestjs/common';
 import { VeiculosService } from './veiculos.service';
 import { CreateVeiculoDto } from './dto/create-veiculo.dto';
 import { UpdateVeiculoDto } from './dto/update-veiculo.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('veiculos')
 export class VeiculosController {
@@ -13,10 +14,16 @@ export class VeiculosController {
   }
 
   @Get()
+  //Otimizando a Rota
+  @UseInterceptors(CacheInterceptor)
   findAll() {
     return this.veiculosService.findAll();
+    console.log('Veiculo sendo buscado do BD!');
   }
+
   @Get(':id')
+  //Otimizando a Rota
+  @UseInterceptors(CacheInterceptor)
   async findOne(@Param('id') id: string) {
     const veiculo = await this.veiculosService.findOne(id);
     
@@ -25,6 +32,7 @@ export class VeiculosController {
     }
   
     return veiculo;
+    console.log('Veiculo sendo buscado do BD!');
   }
 
   @Put(':id')

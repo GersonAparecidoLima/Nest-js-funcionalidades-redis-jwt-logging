@@ -1,4 +1,4 @@
-import { IsString, IsInt, ValidateNested } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class MarcaDto {
@@ -12,6 +12,10 @@ export class CreateVeiculoDto {
 
   @IsInt()
   ano: number;
+
+  @IsOptional()  
+  @IsNumber()   // Mudança para @IsNumber
+  valor?: number;
 
   @ValidateNested()
   @Type(() => MarcaDto)

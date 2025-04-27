@@ -8,10 +8,12 @@ import {
   Delete,
   ParseIntPipe,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MarcaService } from './marca.service';
 import { CreateMarcaDto } from './dto/create-marca.dto';
 import { UpdateMarcaDto } from './dto/update-marca.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('marca')
 export class MarcaController {
@@ -23,13 +25,19 @@ export class MarcaController {
   }
 
   @Get()
+  //Otimizando a Rota
+  @UseInterceptors(CacheInterceptor)
   findAll() {
     return this.marcaService.findAll();
+   // console.log('Marca sendo buscado do BD!');
   }
 
   @Get(':id')
+  //Otimizando a Rota
+  @UseInterceptors(CacheInterceptor)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.marcaService.findOne(id);
+    //console.log('Marca sendo buscado do BD!');
   }
 
   @Put(':id')

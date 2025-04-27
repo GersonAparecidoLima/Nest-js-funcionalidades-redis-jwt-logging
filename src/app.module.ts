@@ -20,6 +20,8 @@ import { LoggerGlobalInterceptor } from './recursos/interceptores/logger-global.
 import { MarcaModule } from './modulos/marca/marca.module';
 import { VeiculosModule } from './modulos/veiculos/veiculos.module';
 
+import { CacheInterceptor } from '@nestjs/cache-manager';
+
 @Module({
   imports: [
     UsuarioModule,
@@ -37,6 +39,8 @@ import { VeiculosModule } from './modulos/veiculos/veiculos.module';
     CacheModule.registerAsync({
       useFactory: async () => ({
         store: await redisStore({ ttl: 10 * 1000 }),
+        //ttl, que significa Time to Live (Tempo de vida), com o valor 10000.
+        //10000 correspode a 10 segungo
       }),
       isGlobal: true,
     }),

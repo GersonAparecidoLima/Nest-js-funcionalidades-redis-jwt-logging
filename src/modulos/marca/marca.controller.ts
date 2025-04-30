@@ -9,12 +9,18 @@ import {
   ParseIntPipe,
   Put,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { MarcaService } from './marca.service';
 import { CreateMarcaDto } from './dto/create-marca.dto';
 import { UpdateMarcaDto } from './dto/update-marca.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import {
+  AutenticacaoGuard,
+  RequisicaoComUsuario,
+} from '../autenticacao/autenticacao.guard';
 
+@UseGuards(AutenticacaoGuard)
 @Controller('marca')
 export class MarcaController {
   constructor(private readonly marcaService: MarcaService) {}
